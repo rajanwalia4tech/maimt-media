@@ -1,0 +1,9 @@
+<header>
+	<% if(locals.user) {%> 
+		<a href="/">Feed</a>
+		<a href="/users/profile">My Profile</a>
+		<a href="/users/logout">Logout</a>
+	<% }else{ %>
+		Home Page
+	<% } %> 
+</header>

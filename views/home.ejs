@@ -1,12 +1,33 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><%= title %> </title>
 </head>
 <body>
-
-<h1> Home Page </h1>
+	<%- include('_header') -%> 
+	<form action="/users/login" method="post">
+		<h1>Login Here</h1>
+		<input type="text" name="email" placeholder="email" id="">
+		<input type="text" name="password" placeholder="password" id="">
+		<input type="submit" value="Login">
+	</form>
+	<br>
+	
+	<form action="/users/create" method="POST">
+		
+		<h1>Sign Up here</h1>
+	<input type="text" name="first_name" placeholder="first name" id=""><br>
+	<input type="text" name="last_name" placeholder="last name" id=""><br>
+	<input type="text" name="email" placeholder="email" id=""><br>
+	<input type="text" name="password" placeholder="password" id=""><br>
+	<input type="text" name="confirm_password" placeholder="confirm password" id=""><br>
+	<input type="radio" name="gender" value="male"  id="">Male
+	<input type="radio" name="gender" value="female" id="">Female<br>
+	<input type="date" name="dob" id="">
+	<input type="submit" value="Submit">
+</form>
 </body>
-
-
-
-<html>
+</html>

@@ -23,7 +23,7 @@ module.exports.create = async (req,res)=>{
 
 	// Password not Match
 	if(password != confirmPassword){
-		return res.status(404).json({"error":"Password are not Matching"});
+		return res.status(404).json({"error":"Password are not matching"});
 	}
 
 	let user = await Users.findOne({
@@ -33,7 +33,7 @@ module.exports.create = async (req,res)=>{
 
 	// if user already exist
 	if(user)
-		res.status(201).send("User Already exist");
+		return res.status(201).json({"error" : "User Already exist"});
 
 	// TODO : store the hash password
 	let newUser = await Users.create({
@@ -47,6 +47,17 @@ module.exports.create = async (req,res)=>{
 
 	// TODO : this user also include the password 
 	// so we need to remove the password 
-	return res.status(201).send(newUser);
+	return res.status(201).json({"success" : "User Created"});
 }
 
+// Login the user
+
+module.exports.login = (req,res)=>{
+	return res.redirect("/");
+}
+
+// logout or destroy the session
+module.exports.logout = (req,res)=>{
+	req.logout(); // this logout function has set in request using passport
+	return res.redirect("/");
+}

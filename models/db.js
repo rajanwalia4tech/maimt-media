@@ -18,6 +18,6 @@ async function setModels(){
 	await Likes.sync();
 }
 
-setModels();
+//setModels();
 
 module.exports = db

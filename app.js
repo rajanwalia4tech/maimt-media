@@ -1,19 +1,38 @@
 const express = require("express");
 const ejs = require("ejs");
+const session = require("express-session");
+const passport = require("./config/passport-local-strategy");
+const router = require("./routes");
 const db = require("./models/db");
-const app = express();
 const PORT = process.env.PORT || 3000;
 
-const router = require("./routes");
+const app = express();
 
 // To recieve post requests
 app.use(express.urlencoded({extended:true}));
-app.use(express.json());
+app.use(express.json());  
 
 
 // use the ejs files to render the templates
 app.set("view engine","ejs");
 app.set("views","./views");
+
+
+// use sessions 
+app.use(session({
+  secret:"This is a secret string",
+  resave:false,
+  saveUninitialized:false,
+  cookie:{
+    maxAge: 1000*60*60*24
+  }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session()); 
+
+// set authentication if user is authenticated
+app.use(passport.setAuthenticatedUser);
 
 // use the router/index.js file to route to other routes
 app.use("/",router);
