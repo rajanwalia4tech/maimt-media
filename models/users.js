@@ -52,7 +52,7 @@ const Users = sequelize.define('User',{
 		type:DataTypes.STRING(150)
 	},
 	dob:{
-		type:DataTypes.DATE
+		type:DataTypes.DATEONLY
 	}
 },{timestamps:true});
 
