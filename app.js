@@ -2,6 +2,7 @@ const express = require("express");
 const ejs = require("ejs");
 const session = require("express-session");
 const passport = require("./config/passport-local-strategy");
+const expressLayouts = require("express-ejs-layouts");
 const router = require("./routes");
 const db = require("./models/db");
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,12 @@ app.use(express.json());
 app.set("view engine","ejs");
 app.set("views","./views");
 
+// use express layouts
+app.use(expressLayouts);
+
+// express styles and subpages from subpages into layouts
+app.set('layout extractStyles',true);
+app.set('layout extractScripts',true);
 
 // use sessions 
 app.use(session({

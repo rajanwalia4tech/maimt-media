@@ -15,7 +15,6 @@ module.exports.create = async (req,res)=>{
 	let confirmPassword = req.body.confirm_password;
 	let gender = req.body.gender;
 	let dob = req.body.dob;
-	console.log(req.body)
 	if(!firstName || !lastName || !email || !password || !confirmPassword || !gender || !dob){
 		
 		return res.status(404).json({"error": "All Fields are required"});
@@ -34,7 +33,7 @@ module.exports.create = async (req,res)=>{
 	// if user already exist
 	if(user)
 		return res.status(201).json({"error" : "User Already exist"});
-	
+
 	gender = req.body.gender == 'male' ? true:false;
 	// TODO : store the hash password
 	let newUser = await Users.create({
@@ -50,6 +49,12 @@ module.exports.create = async (req,res)=>{
 	// so we need to remove the password 
 	return res.status(201).json({"success" : "User Created"});
 }
+
+
+
+
+
+
 
 // Login the user
 
