@@ -15,7 +15,7 @@ module.exports.create = async (req,res)=>{
 	let confirmPassword = req.body.confirm_password;
 	let gender = req.body.gender;
 	let dob = req.body.dob;
-
+	console.log(req.body)
 	if(!firstName || !lastName || !email || !password || !confirmPassword || !gender || !dob){
 		
 		return res.status(404).json({"error": "All Fields are required"});

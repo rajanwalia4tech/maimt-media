@@ -6,7 +6,7 @@ const usersController = require("../controllers/users_controller");
 
 router.get("/profile",passport.checkAuthentication,usersController.profile);
 
-router.post("/create",passport.checkAuthentication,usersController.create);
+router.post("/create",usersController.create);
 
 router.post("/login", passport.authenticate('local', { // passport.authenticate is a built in function
 	failureRedirect: '/', 
