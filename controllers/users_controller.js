@@ -30,11 +30,11 @@ module.exports.create = async (req,res)=>{
 		where:{email}
 	});
 
-
+	
 	// if user already exist
 	if(user)
 		return res.status(201).json({"error" : "User Already exist"});
-
+	gender = req.body.gender == 'male' ? true:false;
 	// TODO : store the hash password
 	let newUser = await Users.create({
 		firstName,
