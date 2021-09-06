@@ -1,8 +1,12 @@
 const Users = require("../models/users");
+const fs = require("fs").promises;
+const path = require("path");
 
 // users profile page
-module.exports.profile = (req,res)=>{
-	res.send("<h1> Profile Page </h1>");
+module.exports.profile = async(req,res)=>{
+	const user = await Users.findByPk(req.user.id);
+	user.password = undefined;
+	return res.render("user_profile",{title:"My Profile",user});
 }
 
 
@@ -51,10 +55,36 @@ module.exports.create = async (req,res)=>{
 }
 
 
-
-
-
-
+// Update user
+module.exports.update = async (req,res)=>{
+	console.log('req.file', req.file);
+	console.log(req.body);
+	if(req.file){
+		const oldPath = path.join(__dirname, '..', 'public','images' ,'uploads' , req.file.filename);
+	  	const newPath = path.join(__dirname, '..', 'public','images' ,'avatars','avatar_'+req.user.id+"."+req.file.mimetype.split('/').pop());
+	    await fs.rename(oldPath, newPath)       
+	    const profileImageUrl = path.join('public','images','avatars','avatar_'+req.user.id+"."+req.file.mimetype.split('/').pop());
+		await Users.update({
+			profileImageUrl
+		},
+		{
+			where:{
+				id:req.user.id
+			}
+		});
+	}
+		await Users.update(
+			req.body
+		,
+		{
+			where:{
+				id:req.user.id
+			}
+		});
+	const user = await Users.findByPk(req.user.id);
+	console.log("Profile Updated");
+	return res.redirect("back");
+}
 
 // Login the user
 

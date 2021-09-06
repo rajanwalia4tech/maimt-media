@@ -3,6 +3,8 @@ const ejs = require("ejs");
 const session = require("express-session");
 const passport = require("./config/passport-local-strategy");
 const expressLayouts = require("express-ejs-layouts");
+const multer = require("multer");
+const fs = require("fs").promises;
 const router = require("./routes");
 const db = require("./models/db");
 const PORT = process.env.PORT || 3000;
@@ -40,6 +42,9 @@ app.use(passport.session());
 
 // set authentication if user is authenticated
 app.use(passport.setAuthenticatedUser);
+
+// public file serving
+app.use("/public",express.static(__dirname+ '/public'));
 
 // use the router/index.js file to route to other routes
 app.use("/",router);

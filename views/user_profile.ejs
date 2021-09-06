@@ -1,0 +1,23 @@
+
+  <h1>Profile Page</h1>
+  <form action="/users/update" method="POST" enctype="multipart/form-data">
+  	<% if(!user.profileImageUrl){ %>
+  		<img src="/public/images/avatars/default.jpg" style="width:100px;">
+  	<% }else {%>
+  		<img src="/<%= user.profileImageUrl %>"  style="width:100px;" >
+  	<% } %>
+     <input type="file" name="avatar" id="avatar" placeholder="change Photo">
+     <br>
+    <input type="text" name="firstName" id="username" placeholder="First Name" value="<%= user.firstName %>">
+     <input type="text" name="lastName" id="username" placeholder="Last Name" value="<%= user.lastName %>">
+    <br>
+    email : <%= user.email %>
+    <br>
+    Gender : <%= user.gender %> <br>
+    DOB : <%= user.dob %><br>
+     <textarea name="bio"  placeholder="BIO" rows="5" cols="50"><%= user.bio %></textarea>
+    <br>
+     <textarea name="address" id="" placeholder="address" rows="5" cols="50"><%= user.address %></textarea>
+    <br>
+    <button type="submit">Submit</button>
+  </form>
