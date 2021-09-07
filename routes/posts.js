@@ -8,4 +8,6 @@ const upload = multer({dest:'public/images/uploads'});
 
 router.post("/create",upload.single("postImage"),postsController.create);
 
+router.get("/all-posts",postsController.allPost);
+
 module.exports = router;

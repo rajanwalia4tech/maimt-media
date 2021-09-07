@@ -13,7 +13,7 @@ const Likes = require("./likes");
 
 async function setModels(){
 	await Users.sync();
-	await Posts.sync();
+	await Posts.sync()
 	await Comments.sync();
 	await Likes.sync();
 }

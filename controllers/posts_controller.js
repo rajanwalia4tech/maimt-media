@@ -1,6 +1,8 @@
 const Posts = require("../models/posts");
+const Users = require("../models/users");
 const fs = require("fs").promises;
 const path = require("path");
+
 
 // Post created
 module.exports.create = async (req,res)=>{
@@ -27,4 +29,13 @@ module.exports.create = async (req,res)=>{
 	}
 	
 	res.send("post created");
+}
+
+
+module.exports.allPost=async (req,res)=>{
+	const allposts=await Posts.findAll({
+		include:[{model:Users,attributes:{exclude:['password']} }]
+	});
+	
+	return res.status(200).json(allposts);
 }
