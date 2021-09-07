@@ -5,6 +5,7 @@ const path = require("path");
 // users profile page
 module.exports.profile = async(req,res)=>{
 	const user = await Users.findByPk(req.user.id);
+	user.gender = user.gender?"Male":"Female";
 	user.password = undefined;
 	return res.render("user_profile",{title:"My Profile",user});
 }
@@ -48,10 +49,9 @@ module.exports.create = async (req,res)=>{
 		gender,
 		dob
 	})
-
 	// TODO : this user also include the password 
 	// so we need to remove the password 
-	return res.status(201).json({"success" : "User Created"});
+	return res.redirect("/");
 }
 
 
@@ -82,7 +82,6 @@ module.exports.update = async (req,res)=>{
 			}
 		});
 	const user = await Users.findByPk(req.user.id);
-	console.log("Profile Updated");
 	return res.redirect("back");
 }
 

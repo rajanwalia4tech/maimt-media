@@ -1,10 +1,11 @@
 const Posts = require("../models/posts");
 const Users = require("../models/users");
+const Comments = require("../models/comments");
 const fs = require("fs").promises;
 const path = require("path");
 
 
-// Post created
+// API to create the Post
 module.exports.create = async (req,res)=>{
 	const UserId = req.user.id;
 	const body = req.body.caption;
@@ -31,11 +32,33 @@ module.exports.create = async (req,res)=>{
 	res.send("post created");
 }
 
-
+// API to get all the posts
 module.exports.allPost=async (req,res)=>{
 	const allposts=await Posts.findAll({
-		include:[{model:Users,attributes:{exclude:['password']} }]
+		include:[{model:Users,attributes:
+			['id','firstName','lastName','profileImageUrl']
+		 }],
+		attributes:{exclude:['updatedAt']}
 	});
-	
-	return res.status(200).json(allposts);
+	if(allposts.length>0)
+		return res.status(200).json(allposts);
+
+	return res.status(404).json({"error":"No post exists"});
+}
+
+
+// API to get all the comments of a post by its id
+module.exports.postComments = async (req,res)=>{
+	const comments = await Comments.findAll({where:{
+		PostId:req.params.postId
+	},include:[{model:Users,attributes:['id','firstName','lastName','profileImageUrl']}],
+	 order: [
+            ['createdAt', 'DESC'],
+        ],
+        attributes: ['body', 'createdAt']
+	});
+	if(comments.length>0)
+		return res.status(200).json(comments);
+
+	return res.status(404).json({"error":"No such comments exist on this post"});
 }

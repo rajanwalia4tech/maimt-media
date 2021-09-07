@@ -8,6 +8,10 @@ const upload = multer({dest:'public/images/uploads'});
 
 router.post("/create",upload.single("postImage"),postsController.create);
 
+// Get all the posts
 router.get("/all-posts",postsController.allPost);
+
+// Get all the comments of a particular post
+router.get("/:postId/comments",postsController.postComments);
 
 module.exports = router;
