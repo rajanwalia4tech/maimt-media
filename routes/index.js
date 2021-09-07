@@ -11,7 +11,7 @@ router.get('/',homeController.home);
 router.use('/users',require('./users'));
 
 // // route to './post.js' route if request comes on '/posts'
-// router.use('/posts',require('./posts'));
+router.use('/posts',require('./posts'));
 
 // // route to './comments.js' route if request comes on '/comments'
 // router.use('/comments',require('./comments'));
