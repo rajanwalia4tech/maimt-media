@@ -14,4 +14,7 @@ router.get("/all-posts",postsController.allPost);
 // Get all the comments of a particular post
 router.get("/:postId/comments",postsController.postComments);
 
+// Delete the post
+router.get("/:postId",postsController.delete);
+
 module.exports = router;

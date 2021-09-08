@@ -8,7 +8,7 @@ const path = require("path");
 // API to create the Post
 module.exports.create = async (req,res)=>{
 	const UserId = req.user.id;
-	const body = req.body.caption;
+	const body = req.body.body;
 	let newPost = await Posts.create({
 		body,
 		UserId
@@ -61,4 +61,33 @@ module.exports.postComments = async (req,res)=>{
 		return res.status(200).json(comments);
 
 	return res.status(404).json({"error":"No such comments exist on this post"});
+}
+
+// API to delete the post by its id
+module.exports.delete = async (req,res)=>{
+
+	const PostId = req.params.postId;
+	try{
+		// Delete comments
+		await Comments.destroy({
+			where:{
+				PostId
+			}
+		});
+		
+		status = await Posts.destroy({
+			where:{
+				id:PostId
+			}
+		});	
+
+		if(status){
+			return res.status(200).json({"success":"Post deleted"});
+		}
+
+		return res.status(404).json({"error":"No such post exists"});
+	}catch(err){
+
+		return res.redirect("/");
+	}
 }
