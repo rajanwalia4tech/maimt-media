@@ -16,4 +16,7 @@ router.use('/posts',require('./posts'));
 // route to './comments.js' route if request comes on '/comments'
 router.use('/comments',require('./comments'));
 
+// route to './likes.js' route if request comes on '/likes'
+router.use("/likes",require("./likes"));
+
 module.exports = router;
