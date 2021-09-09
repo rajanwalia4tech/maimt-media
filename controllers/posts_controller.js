@@ -91,3 +91,46 @@ module.exports.delete = async (req,res)=>{
 		return res.redirect("/");
 	}
 }
+
+// API for post update
+module.exports.update = async (req,res)=>{
+	const UserId = 12 // req.user.id;
+	const body = req.body.body;
+	const postId = req.params.postId;
+	try{
+
+		const post = await Posts.findByPk(postId);
+		if(!post) // Post not found
+			return res.status(404).json({"error":"Post Not Found"});
+
+		await Posts.update({
+			body
+		},
+		{
+			where:{
+				id:postId
+			}
+		});
+
+		// update the image
+		if(req.file){
+			const oldPath = path.join(__dirname, '..', 'public','images' ,'uploads' , req.file.filename);
+			const newPath = path.join(__dirname, '..', 'public','images' ,'posts','post_'+postId+"."+req.file.mimetype.split('/').pop());
+			await fs.rename(oldPath, newPath);     
+			const postImageUrl = path.join('public','images','posts','post_'+postId+"."+req.file.mimetype.split('/').pop());
+			await Posts.update({
+				postImageUrl
+			},
+			{
+				where:{
+					id:postId
+				}
+			});
+		}
+			
+		return res.send("post Updated");
+	}catch(err){
+		return res.redirect("/");
+	}
+
+}

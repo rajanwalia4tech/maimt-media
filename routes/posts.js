@@ -15,6 +15,9 @@ router.get("/all-posts",postsController.allPost);
 router.get("/:postId/comments",postsController.postComments);
 
 // Delete the post
-router.get("/:postId",postsController.delete);
+router.get("/:postId/delete",postsController.delete);
+
+// Update the post
+router.post("/:postId/update",upload.single("postImage"),postsController.update);
 
 module.exports = router;
