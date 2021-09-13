@@ -46,6 +46,23 @@ module.exports.allPost=async (req,res)=>{
 	return res.status(404).json({"error":"No post exists"});
 }
 
+// Get Posts as page no. and limit wise to implement infinite scroll feature
+module.exports.getPosts = async (req,res)=>{
+	let size = parseInt(req.query.limit);
+	let page = (parseInt(req.query.page) - 1)*2;
+	console.log(page,size)
+	try{
+		const posts = await Posts.findAll({
+				limit:size,
+				offset:page
+		});
+		return res.status(200).json(posts);
+	}catch(err){
+		return res.status(404).json({
+			"error":"Internal Server Error"
+		});
+	}
+}
 
 // API to get all the comments of a post by its id
 module.exports.postComments = async (req,res)=>{

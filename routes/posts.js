@@ -20,4 +20,7 @@ router.get("/:postId/delete",postsController.delete);
 // Update the post
 router.post("/:postId/update",upload.single("postImage"),postsController.update);
 
+// Paginated result API using ?page=1&&limit=5
+router.get("/",postsController.getPosts);
+
 module.exports = router;
