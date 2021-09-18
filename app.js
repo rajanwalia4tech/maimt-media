@@ -15,10 +15,9 @@ const app = express();
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());  
 
-
-// use the ejs files to render the templates
-app.set("view engine","ejs");
-app.set("views","./views");
+// public file serving
+app.use("/public",express.static(__dirname+ '/public'));
+app.use(express.static(__dirname+ '/public'));
 
 // use express layouts
 app.use(expressLayouts);
@@ -26,6 +25,10 @@ app.use(expressLayouts);
 // express styles and subpages from subpages into layouts
 app.set('layout extractStyles',true);
 app.set('layout extractScripts',true);
+
+// use the ejs files to render the templates
+app.set("view engine","ejs");
+app.set("views","./views");
 
 // use sessions 
 app.use(session({
@@ -42,9 +45,6 @@ app.use(passport.session());
 
 // set authentication if user is authenticated
 app.use(passport.setAuthenticatedUser);
-
-// public file serving
-app.use("/public",express.static(__dirname+ '/public'));
 
 // use the router/index.js file to route to other routes
 app.use("/",router);
