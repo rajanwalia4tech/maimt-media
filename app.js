@@ -17,7 +17,7 @@ app.use(express.json());
 
 // public file serving
 app.use("/public",express.static(__dirname+ '/public'));
-app.use(express.static(__dirname+ '/public'));
+app.use("/",express.static(__dirname+ '/public'));
 
 // use express layouts
 app.use(expressLayouts);

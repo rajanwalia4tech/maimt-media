@@ -6,13 +6,14 @@ const Likes = require("../models/likes");
 module.exports.like = async(req,res)=>{
 
     try{
-
     // get userId = req.user.id;
-    const userId =1// req.user.id;
+    const userId = req.user.id;
     // get post id;
     const postId = req.body.postId;
     // check whether the post exist or not
     // find previous likes
+    if(!userId || !postId)
+        return res.json("Missing userId or PostId");
     const post = await Posts.findByPk(postId);
     if(!post)
     return res.status(404).json({"error":"Post Not Found"});

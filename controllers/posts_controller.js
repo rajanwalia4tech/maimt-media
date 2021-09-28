@@ -29,7 +29,7 @@ module.exports.create = async (req,res)=>{
 		});
 	}
 	
-	res.send("post created");
+	res.redirect("/");
 }
 
 // API to get all the posts
@@ -38,8 +38,11 @@ module.exports.allPost=async (req,res)=>{
 		include:[{model:Users,attributes:
 			['id','firstName','lastName','profileImageUrl']
 		 }],
-		attributes:{exclude:['updatedAt']}
-	});
+		attributes:{exclude:['updatedAt']},
+		order: [
+            ['createdAt', 'DESC'],
+        ]
+	})
 	if(allposts.length>0)
 		return res.status(200).json(allposts);
 
