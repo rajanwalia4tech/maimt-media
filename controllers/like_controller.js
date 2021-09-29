@@ -64,3 +64,23 @@ module.exports.like = async(req,res)=>{
         return res.redirect("/");
     }
 }
+
+module.exports.isUserLiked = async (req,res)=>{
+    const PostId = req.params.postId;
+    const UserId = req.user.id;
+    try{
+        const likedUsers = await Likes.findOne({
+            where:{
+                PostId,
+                UserId
+            }
+        });
+        if(likedUsers)
+            return res.status(200).json({"isLiked":"true"});
+     
+        return res.status(200).json({"isLiked":"false"});
+    }catch(err){
+        return res.status(404).json(err);
+    }
+    
+}

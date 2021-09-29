@@ -2,6 +2,7 @@ const Posts = require("../models/posts");
 const Users = require("../models/users");
 const Comments = require("../models/comments");
 const fs = require("fs").promises;
+const Likes = require('../models/likes');
 const path = require("path");
 
 
@@ -37,8 +38,10 @@ module.exports.allPost=async (req,res)=>{
 	const allposts=await Posts.findAll({
 		include:[{model:Users,attributes:
 			['id','firstName','lastName','profileImageUrl']
-		 }],
+		}],
 		attributes:{exclude:['updatedAt']},
+		raw: true,
+		nest: true,
 		order: [
             ['createdAt', 'DESC'],
         ]
