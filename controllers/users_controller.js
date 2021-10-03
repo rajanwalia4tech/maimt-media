@@ -1,13 +1,25 @@
 const Users = require("../models/users");
+const Posts = require("../models/posts");
 const fs = require("fs").promises;
 const path = require("path");
 
 // users profile page
 module.exports.profile = async(req,res)=>{
 	const user = await Users.findByPk(req.user.id);
+	const posts = await Posts.findAll({
+		where:{
+			UserId:req.user.id
+		},
+		raw: true,
+		nest: true,
+		order: [
+            ['createdAt', 'DESC'],
+        ]
+	})
+	console.log(posts);
 	user.gender = user.gender?"Male":"Female";
 	user.password = undefined;
-	return res.render("user_profile",{title:"My Profile",user});
+	return res.render("user_profile",{title:"My Profile",user,posts});
 }
 
 
@@ -72,6 +84,7 @@ module.exports.update = async (req,res)=>{
 				id:req.user.id
 			}
 		});
+
 	}
 		await Users.update(
 			req.body

@@ -47,6 +47,7 @@ const Users = sequelize.define('User',{
 	},
 	profileImageUrl:{
 		type:DataTypes.STRING(150),
+		defaultValue:'public/images/uploads/default.jpg'
 	},
 	address:{
 		type:DataTypes.STRING(150)

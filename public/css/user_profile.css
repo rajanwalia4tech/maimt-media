@@ -1,0 +1,19 @@
+/* .profileImg{
+    text-align: center;   
+    padding-top: 100px;
+} */
+
+.profileImg img{
+    width: 100%;
+    /* border-radius: 50%; */
+    border-radius: 2px; 
+}
+
+textarea{
+    width: 100%;
+}
+
+
+@media  screen and (max-width: 300px) {
+    
+}

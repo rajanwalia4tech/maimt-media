@@ -26,6 +26,7 @@ module.exports.like = async(req,res)=>{
 
     // Unlike the post
     if(like){
+        
         await Posts.update({
             likeCount:post.likeCount-1
         },{
@@ -39,8 +40,8 @@ module.exports.like = async(req,res)=>{
                 id:like.id
             }
         })
-
-        return res.status(202).json({"success":"Post Unliked"});
+        let likeCount = post.likeCount-1;
+        return res.status(202).json({"success":"Post Unliked","likeCount":likeCount});
     }
 
     // increase the likeCount by 1
@@ -57,8 +58,8 @@ module.exports.like = async(req,res)=>{
         UserId:userId,
         PostId:postId
     });
-
-    return res.status(201).json({"success":"Post Liked"});
+    let likeCount = post.likeCount+1;
+    return res.status(201).json({"success":"Post Liked","likeCount":likeCount});
 
     }catch(err){
         return res.redirect("/");

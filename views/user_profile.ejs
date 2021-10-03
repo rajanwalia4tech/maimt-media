@@ -1,4 +1,180 @@
+<link href="/css/user_profile.css" rel="stylesheet" />
+<script src="/js/user_profile.js"></script>
 
+
+<input type="hidden" id="userId" value="<%= locals.user.id %>">
+<div class="container p-3">
+  <div class="row">
+    <div class="col-lg-5">
+      <form class="border m-1 p-2" action="/users/update" method="POST" enctype="multipart/form-data">
+        <div class="row profile-box">
+          <div class="col profileImg align-middle mb-2">
+            <% if(!user.profileImageUrl){ %>
+              <img src="/public/images/uploads/default.jpg" />
+              <% }else {%>
+                <img src="/<%= user.profileImageUrl %>" />
+                <% } %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="customFile" name="avatar" />
+              <label class="custom-file-label" for="customFile">Change Profile</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col form-group">
+            <h2 class="text-primary">
+              <%= user.firstName %>
+                <%= user.lastName %>
+            </h2>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col">
+            <b class="text-primary mt-1">Email : </b> <span>
+              <%= user.email %>
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <b class="text-primary mt-1"> Date of Birth :</b> <span>
+              <%= user.dob %>
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col form-group">
+            <textarea class="form-control mt-1" name="bio" id="" rows="2"
+              placeholder="write your Bio"><%= user.bio %></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col form-group">
+            <textarea class="form-control" name="address" id="" rows="2"
+              placeholder="Enter your Address"><%= user.address %></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Update Profile</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-lg-7">
+      <div class="row">
+        <div class="col mt-3 mr-2">
+          <div class="card">
+            <form action="/posts/create" method="POST" enctype="multipart/form-data">
+              <div class="card-body form-group">
+                <div class="row">
+                  <div class="col">
+                    <textarea class="form-control" rows="3" placeholder="What is in your mind?" name="body"
+                      id="comment"></textarea>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="ml-3 col-sm-8 custom-file">
+                    <input type="file" class="custom-file-input" id="customFile" name="postImage" />
+                    <label class="custom-file-label" for="customFile">Choose Image</label>
+                  </div>
+                  <div class="col-sm-3"><button class="btn btn-primary btn-block post-btn" type="submit">Post</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div id="post-container" class="ml-2 mr-2 row align-items-center">
+        <% for(post of posts){ %>
+          <div class="col-md-12 mt-3 mb-2 mr-2 border" id="post-<%= post.id %>">
+            <div class="row mt-2 border-bottom">
+              <div class="col-2">
+                <% if(!user.profileImageUrl){ %>
+                  <img src="/public/images/uploads/default.jpg" style="width: 70%;  border-radius: 50%" />
+                  <% }else {%>
+                    <img src="/<%= user.profileImageUrl %>" style="width: 70%; border-radius: 50%" />
+                    <% } %>
+                      <!-- <img
+                src="/images/avatars/avatar_1.jpeg"
+                alt="John Doe"
+                style="width: 80%; height: 80%; border-radius: 50%"
+              /> -->
+              </div>
+              <div class="col-8">
+                <div class="row">
+                  <div class="col"><span>
+                      <%= user.firstName %>
+                        <%= user.lastName %>
+                    </span></div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <small><i>
+                        <%= post.createdAt.toDateString() %>
+                      </i></small>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-2">
+                <div class="row">
+                  <div class="col  pt-3">
+                    <a href="/posts/<%= post.id %>/delete" class="deletePost" style="text-decoration:none;"
+                      id="<%= post.id %>">
+                      <i class="far fa-trash-alt  fa-lg"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row p-1">
+              <div class="col">
+                <p>
+                  <%= post.body %>
+                </p>
+              </div>
+            </div>
+            <% if(post.postImageUrl){ %>
+              <div class="row p-1">
+                <div class="col">
+                  <img src="/<%= post.postImageUrl %>" width="100%" alt="Post image" />
+                </div>
+              </div>
+              <% } %>
+                <div class="row pt-2 border-top" style="text-align: center;">
+                  <div class="col-6 border-right">
+                    <a href="/likes/like" class="myPost" style="text-decoration:none;" id="<%= post.id %>"><i
+                        class="far fa-thumbs-up fa-lg"></i><span class="likeCount">
+                        <%= post.likeCount %>
+                      </span></a>
+
+                  </div>
+                  <div class="col-6">
+                    <a href="#">💬</a> <span class="commentCount">
+                      <%= post.commentCount %>
+                    </span>
+                  </div>
+                </div>
+          </div>
+          <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  toggleLike();
+  deletePost();
+</script>
+
+
+<!-- 
   <h1>Profile Page</h1>
   <form action="/users/update" method="POST" enctype="multipart/form-data">
   	<% if(!user.profileImageUrl){ %>
@@ -20,4 +196,4 @@
      <textarea name="address" id="" placeholder="address" rows="5" cols="50"><%= user.address %></textarea>
     <br>
     <button type="submit">Submit</button>
-  </form>
+  </form> -->

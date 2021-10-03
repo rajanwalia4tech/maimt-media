@@ -9,6 +9,7 @@
     <button type="submit">Submit</button>
   </form> -->
   
+  <input type="hidden" id="userId" value="<%= locals.user.id %>">
   <div class="container">
     <div class="row">
         <div class="col-md-6 mt-3 mr-2">
@@ -36,39 +37,6 @@
         </div>
 
         <div id="post-container" class="h-100 ml-2 mr-2 row align-items-center">
-         <div class="col-md-6 mt-3 mb-2 mr-2 border">
-                <div class="row mt-2 border-bottom">
-                    <div class="col-2"><img src="/images/avatars/avatar_16.jpeg" alt="John Doe" 
-                            style="width:80%;height: 80%; border-radius: 50%;"></div>
-                    <div class="col-10">
-                        <div class="row">
-                            <div class="col"><span>RAJAN</span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col"><small><i>February 19, 2016</i></small></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row p-1">
-                    <div class="col">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                            et dolore magna aliqua.</p>
-                    </div>
-                </div>
-                <div class="row p-1">
-                    <div class="col">
-                        <img src="/images/avatars/avatar_16.jpeg" width="100%" alt="Post image">
-                    </div>
-                </div>
-                <div class="row pt-2 border-top" style="text-align: center;">
-                    <div class="col-6 border-right">
-                        <a href="/likes/like">👍</a> <span class="likeCount"> 23</span>
-                    </div>
-                    <div class="col-6">
-                      <a href="#">💬</a> <span class="commentCount"> 23</span>
-                    </div>
-                </div>
-            </div> 
         </div>
         </div>
     </div>

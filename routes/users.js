@@ -17,7 +17,7 @@ router.post("/create",usersController.create);
 
 // TODO: restricting the update the 
 // Update Profile
-router.post("/update",upload.single('avatar'),usersController.update);
+router.post("/update",passport.checkAuthentication,upload.single('avatar'),usersController.update);
 
 router.post("/login", passport.authenticate('local', { // passport.authenticate is a built in function
 	failureRedirect: '/', 

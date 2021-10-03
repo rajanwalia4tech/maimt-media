@@ -12,10 +12,10 @@ const Comments = require("./comments");
 const Likes = require("./likes");
 
 async function setModels(){
-	await Users.sync();
-	await Posts.sync()
-	await Comments.sync();
-	await Likes.sync();
+	await Users.sync({force:true});
+	await Posts.sync({force:true})
+	await Comments.sync({force:true});
+	await Likes.sync({force:true});
 }
 
 //setModels();

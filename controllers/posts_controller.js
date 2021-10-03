@@ -9,7 +9,10 @@ const path = require("path");
 // API to create the Post
 module.exports.create = async (req,res)=>{
 	const UserId = req.user.id;
-	const body = req.body.body;
+	const body = req.body.body.trim();
+	if(body ==``) //  Caption can't be empty
+		return res.redirect("/");
+
 	let newPost = await Posts.create({
 		body,
 		UserId
@@ -97,14 +100,24 @@ module.exports.delete = async (req,res)=>{
 				PostId
 			}
 		});
+
+		let Post = await Posts.findByPk(PostId);
 		
-		status = await Posts.destroy({
+		let status = await Posts.destroy({
 			where:{
 				id:PostId
 			}
 		});	
 
 		if(status){
+			let postImageUrl = Post.postImageUrl;
+			console.log("----------------------------------------",postImageUrl);
+			await fs.unlink(postImageUrl,(err)=>{
+				if(err)
+					return res.status(500).json({"error":"Internal Server Error"});
+				console.log("Post deleted");
+			})
+
 			return res.status(200).json({"success":"Post deleted"});
 		}
 
