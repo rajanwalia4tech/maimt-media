@@ -2,7 +2,7 @@
   "name": "maimt-media",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
@@ -20,7 +20,5 @@
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.12"
-  }
+  "devDependencies": {}
 }
