@@ -9,8 +9,8 @@ const path = require("path");
 // API to create the Post
 module.exports.create = async (req,res)=>{
 	const UserId = req.user.id;
-	const body = req.body.body.trim();
-	if(body ==``) //  Caption can't be empty
+	const body = req.body.body;
+	if(body ==`` && body.trim()) //  Caption can't be empty
 		return res.redirect("/");
 
 	let newPost = await Posts.create({
