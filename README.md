@@ -1,4 +1,4 @@
-# GoSocial Project
+# MAIMTMEDIA Project
 
 ## Installations
 
