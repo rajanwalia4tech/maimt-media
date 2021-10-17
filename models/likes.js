@@ -1,14 +1,14 @@
 const {Sequelize,DataTypes} = require("sequelize");
-// const sequelize = new Sequelize({
-// 	dialect: 'mysql',
-// 	database: 'maimtmediadb',
-// 	username: 'maimtmediauser',
-// 	password: 'maimtmediapassword'
-// });
 const sequelize = new Sequelize({
-	dialect: 'sqlite',
-	storage: __dirname + '/test.db'
+	dialect: 'mysql',
+	database: 'maimtmediadb',
+	username: 'maimtmediauser',
+	password: 'maimtmediapassword'
 });
+// const sequelize = new Sequelize({
+// 	dialect: 'sqlite',
+// 	storage: __dirname + '/test.db'
+// });
 
 const Users = require("./Users");
 const Posts = require("./Posts");
