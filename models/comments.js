@@ -24,7 +24,7 @@ const Comments = sequelize.define('Comment',{
 });
 
 const Users = require("./users");
-const Posts = require("./Posts");
+const Posts = require("./posts");
 
 Posts.hasMany(Comments);
 Comments.belongsTo(Posts);

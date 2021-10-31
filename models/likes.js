@@ -10,8 +10,8 @@ const sequelize = new Sequelize({
 	storage: __dirname + '/test.db'
 });
 
-const Users = require("./Users");
-const Posts = require("./Posts");
+const Users = require("./users");
+const Posts = require("./posts");
 
 const Likes = sequelize.define('Like',{
 	id:{
