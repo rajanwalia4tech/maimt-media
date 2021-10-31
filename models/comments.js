@@ -23,7 +23,7 @@ const Comments = sequelize.define('Comment',{
 	}
 });
 
-const Users = require("./Users");
+const Users = require("./users");
 const Posts = require("./Posts");
 
 Posts.hasMany(Comments);
