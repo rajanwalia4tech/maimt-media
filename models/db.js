@@ -6,6 +6,12 @@ const {Sequelize} = require("sequelize");
 // 	password: 'maimtmediapassword'
 // });
 
+const db = new Sequelize({
+	dialect: 'sqlite',
+	storage: __dirname + '/test.db'
+});
+
+
 const Users = require("./users");
 const Posts = require("./posts");
 const Comments = require("./comments");
