@@ -1,10 +1,10 @@
 const {Sequelize} = require("sequelize");
-const db = new Sequelize({
-	dialect: 'mysql',
-	database: 'maimtmediadb',
-	username: 'maimtmediauser',
-	password: 'maimtmediapassword'
-});
+// const db = new Sequelize({
+// 	dialect: 'mysql',
+// 	database: 'maimtmediadb',
+// 	username: 'maimtmediauser',
+// 	password: 'maimtmediapassword'
+// });
 
 const Users = require("./users");
 const Posts = require("./posts");
