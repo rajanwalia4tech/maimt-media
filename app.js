@@ -6,9 +6,11 @@ const expressLayouts = require("express-ejs-layouts");
 const multer = require("multer");
 const fs = require("fs").promises;
 const router = require("./routes");
-const db = require("./models/db");
+const dotenv = require("dotenv");
+dotenv.config();
+const db = require("./models/index");
 const PORT = process.env.PORT || 3000;
-
+console.log(PORT)
 const app = express();
 
 // To recieve post requests
@@ -49,7 +51,9 @@ app.use(passport.setAuthenticatedUser);
 // use the router/index.js file to route to other routes
 app.use("/",router);
 
-db.sync()
+db.sequelize.sync({
+  // force:true
+})
   .then(() => {
     app.listen(PORT, () => {
       console.log(`server started on http://localhost:${PORT}`)

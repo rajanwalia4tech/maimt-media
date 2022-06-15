@@ -15,7 +15,7 @@ mysql -u root
 ``` 
 create database maimtmediadb;
 
-create user maimtmediauser identified with mysql_native_password by 'maimtmediapassword';
+create user maimtmediauser identified with mysql_native_password by 'Password123#@!';
 
 grant all privileges on maimtmediadb.*  to maimtmediauser;
 

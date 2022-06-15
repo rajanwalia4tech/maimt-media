@@ -1,9 +1,10 @@
 const {Sequelize} = require("sequelize");
 const db = new Sequelize({
 	dialect: 'mysql',
+	host:"127.0.0.1",
 	database: 'maimtmediadb',
 	username: 'maimtmediauser',
-	password: 'maimtmediapassword'
+	password: 'Password123#@!'
 });
 
 const Users = require("./users");
@@ -18,6 +19,6 @@ async function setModels(){
 	await Likes.sync();
 }
 
-//setModels();
+setModels();
 
 module.exports = db
