@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 verifyToken = (req, res, next) => {
     let token = req.headers["authorization"];
+    // console.log(token)
     if (!token) {
       return res.status(403).send({
         message: "Please provide us Token!"
@@ -20,7 +21,7 @@ verifyToken = (req, res, next) => {
       }else{
         req.body.user_id = decoded.user_id;
       }
-      
+      // console.log(req.body.user_id)
       next();
     });
   };

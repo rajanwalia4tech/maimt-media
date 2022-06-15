@@ -5,9 +5,9 @@ const passport = require("./config/passport-local-strategy");
 const expressLayouts = require("express-ejs-layouts");
 const multer = require("multer");
 const fs = require("fs").promises;
-const router = require("./routes");
 const dotenv = require("dotenv");
 dotenv.config();
+const router = require("./routes");
 const db = require("./models/index");
 const PORT = process.env.PORT || 3000;
 console.log(PORT)
