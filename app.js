@@ -6,6 +6,7 @@ const expressLayouts = require("express-ejs-layouts");
 const multer = require("multer");
 const fs = require("fs").promises;
 const dotenv = require("dotenv");
+const morgan = require("morgan");
 dotenv.config();
 const router = require("./routes");
 const db = require("./models/index");
@@ -16,7 +17,7 @@ const app = express();
 // To recieve post requests
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());  
-
+app.use(morgan("dev"));
 // public file serving
 app.use("/public",express.static(__dirname+ '/public'));
 app.use("/",express.static(__dirname+ '/public'));

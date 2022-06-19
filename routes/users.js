@@ -16,7 +16,7 @@ router.post("/create",usersController.create);
 
 // TODO: restricting the update the 
 // Update Profile
-router.post("/update",verifyToken,upload.single('avatar'),usersController.update);
+router.post("/update",upload.single('avatar'),verifyToken,usersController.update);
 
 router.post("/login",usersController.login);
 

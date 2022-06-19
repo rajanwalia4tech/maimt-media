@@ -1,71 +1,101 @@
-const Posts = require("../models/posts");
-const Users = require("../models/users");
-const Comments = require("../models/comments");
+const db = require("../models");
+const Users = db.Users;
+const Posts = db.Posts;
+const Comments = db.Comments;
+const Likes =  db.Likes;
+
+
 const fs = require("fs").promises;
-const Likes = require('../models/likes');
+
 const path = require("path");
 
 
 // API to create the Post
 module.exports.create = async (req,res)=>{
-	const UserId = req.user.id;
-	const body = req.body.body;
-	if(body ==`` && body.trim()) //  Caption can't be empty
-		return res.redirect("/");
+	const request = {...req.body};
+	try{
+		const UserId = request.user_id;
+		const body = request.body;
+		console.log(body)
 
-	let newPost = await Posts.create({
-		body,
-		UserId
-	});
+		if(body!=undefined && body.trim().length==0){
+			//  Caption can't be empty
+			throw new Error("Caption can't be empty!");
+		} 
 	
-	if(req.file){
-		const oldPath = path.join(__dirname, '..', 'public','images' ,'uploads' , req.file.filename);
-		const newPath = path.join(__dirname, '..', 'public','images' ,'posts','post_'+newPost.id+"."+req.file.mimetype.split('/').pop());
-		await fs.rename(oldPath, newPath);     
-		const postImageUrl = path.join('public','images','posts','post_'+newPost.id+"."+req.file.mimetype.split('/').pop());
-		await Posts.update({
-			postImageUrl
-		},
-		{
-			where:{
-				id:newPost.id
-			}
+		let newPost = await Posts.create({
+			body,
+			UserId
 		});
+		
+		if(req.file){
+			const oldPath = path.join(__dirname, '..', 'public','images' ,'uploads' , req.file.filename);
+			const newPath = path.join(__dirname, '..', 'public','images' ,'posts','post_'+newPost.id+"."+req.file.mimetype.split('/').pop());
+			await fs.rename(oldPath, newPath);     
+			const postImageUrl = path.join('public','images','posts','post_'+newPost.id+"."+req.file.mimetype.split('/').pop());
+			await Posts.update({
+				postImageUrl
+			},
+			{
+				where:{
+					id:newPost.id
+				}
+			});
+		}
+		
+		return res.status(200).json({
+			message : "Uploaded the post successfully"
+		})
+
+	}catch(err){
+		return res.status(400).json({
+			message : err.message
+		})
 	}
-	
-	res.redirect("/");
 }
 
 // API to get all the posts
 module.exports.allPost=async (req,res)=>{
-	const allposts=await Posts.findAll({
-		include:[{model:Users,attributes:
-			['id','firstName','lastName','profileImageUrl']
-		}],
-		attributes:{exclude:['updatedAt']},
-		raw: true,
-		nest: true,
-		order: [
-            ['createdAt', 'DESC'],
-        ]
-	})
-	if(allposts.length>0)
-		return res.status(200).json(allposts);
-
-	return res.status(404).json({"error":"No post exists"});
+	try{
+		const allposts=await Posts.findAll({
+			include:[{model:Users,attributes:
+				['id','firstName','lastName','profileImageUrl']
+			}],
+			attributes:{exclude:['updatedAt']},
+			raw: true,
+			nest: true,
+			order: [
+				['updatedAt', 'DESC'],
+			]
+		})
+		let response = {};
+		if(allposts && allposts.length==0)
+			allposts = [];
+		response.data = {};
+		response.data.posts = allposts;
+		return res.status(404).json(response);
+	}catch(err){
+		return res.status(400).json({"message":err.message});
+	}
 }
 
 // Get Posts as page no. and limit wise to implement infinite scroll feature
 module.exports.getPosts = async (req,res)=>{
-	let size = parseInt(req.query.limit);
-	let page = (parseInt(req.query.page) - 1)*2;
+	const request = {...req.query};
+	let size = 8;
+	if(request.size)
+		size = parseInt(request.size);
+
+	let page = 1;
+	if(request.page)
+		page = (parseInt(request.page-1))*size;
 	console.log(page,size)
 	try{
 		const posts = await Posts.findAll({
 				limit:size,
 				offset:page
 		});
-		return res.status(200).json(posts);
+		return res.status(200).json({data : posts});
 	}catch(err){
 		return res.status(404).json({
 			"error":"Internal Server Error"
@@ -75,24 +105,33 @@ module.exports.getPosts = async (req,res)=>{
 
 // API to get all the comments of a post by its id
 module.exports.postComments = async (req,res)=>{
-	const comments = await Comments.findAll({where:{
-		PostId:req.params.postId
-	},include:[{model:Users,attributes:['id','firstName','lastName','profileImageUrl']}],
-	 order: [
-            ['createdAt', 'DESC'],
-        ],
-        attributes: ['body', 'createdAt']
-	});
-	if(comments.length>0)
-		return res.status(200).json(comments);
-
-	return res.status(404).json({"error":"No such comments exist on this post"});
+	try{
+		const comments = await Comments.findAll({where:{
+			PostId:req.params.postId
+		},include:[{model:Users,attributes:['id','firstName','lastName','profileImageUrl']}],
+		order: [
+				['createdAt', 'DESC'],
+			],
+			attributes: ['body', 'createdAt']
+		});
+		let response = {};
+		if(comments && comments.length==0)
+			comments = [];
+		response.data = {};
+		response.data.comments = comments;
+		return res.status(200).json(response);
+	}catch(err){
+		return res.status(400).json({
+			message : err.message
+		})
+	}
 }
 
 // API to delete the post by its id
 module.exports.delete = async (req,res)=>{
 
-	const PostId = req.params.postId;
+	const request = {...req.body};
+	const PostId = request.postId;
 	try{
 		// Delete comments
 		await Comments.destroy({
@@ -112,32 +151,37 @@ module.exports.delete = async (req,res)=>{
 		if(status){
 			let postImageUrl = Post.postImageUrl;
 			console.log("----------------------------------------",postImageUrl);
-			await fs.unlink(postImageUrl,(err)=>{
-				if(err)
-					return res.status(500).json({"error":"Internal Server Error"});
-				console.log("Post deleted");
-			})
+			if(postImageUrl)
+				await fs.unlink(postImageUrl,(err)=>{
+					if(err)
+						throw new Error("Internal Server Error");
+					console.log("Post deleted");
+				})
 
-			return res.status(200).json({"success":"Post deleted"});
+			return res.status(200).json({"message":"Post deleted successfully"});
 		}
 
-		return res.status(404).json({"error":"No such post exists"});
-	}catch(err){
+		return res.status(404).json({"message":"No such post exists"});
+	}catch(err){	
 
-		return res.redirect("/");
+		return res.status(400).json({
+			message: err.message
+		})
 	}
 }
 
 // API for post update
 module.exports.update = async (req,res)=>{
 	const UserId = 12 // req.user.id;
-	const body = req.body.body;
-	const postId = req.params.postId;
+	const request = {...req.body};
+	const body = request.body?request.body.trim():"";
+	const postId = request.postId;
 	try{
-
 		const post = await Posts.findByPk(postId);
 		if(!post) // Post not found
-			return res.status(404).json({"error":"Post Not Found"});
+			throw new Error("Post not found");
+		if(body.length==0)
+			throw new Error("Caption can't be empty");
 
 		await Posts.update({
 			body
@@ -164,9 +208,11 @@ module.exports.update = async (req,res)=>{
 			});
 		}
 			
-		return res.send("post Updated");
+		return res.send({
+			message : "Post updated Successfully"
+		});
 	}catch(err){
-		return res.redirect("/");
+		return res.status(400).json({"message" : err.message});
 	}
 
 }
