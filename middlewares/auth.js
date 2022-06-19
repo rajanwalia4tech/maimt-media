@@ -22,7 +22,7 @@ verifyToken = (req, res, next) => {
         // console.log("user_id : ",req.query.user_id);
         console.log("request : ",req.query);
       }else{
-        req.body = Object.assign({},req.query,req.params,req.body);
+        req.body = Object.assign({},req.body,req.query,req.params);
         req.body.user_id = decoded.user_id;
         console.log("user_id : ",req.body);
       }

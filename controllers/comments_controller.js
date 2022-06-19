@@ -1,17 +1,20 @@
-const Comments = require("../models/comments");
-const Posts = require("../models/posts");
+const db = require("../models");
+
+const Comments = db.Comments;
+const Posts = db.Posts;
 
 // create comment API
 module.exports.create = async(req,res)=>{
-	const UserId = req.user.id; 
-	const PostId = req.body.postId;
-	const body = req.body.body;
+	const request = {...req.body};
+	const UserId = request.user_id; 
+	const PostId = request.postId;
+	const body = request.body;
 	try{
 		// find the comment count to update the commentCount by 1
 		const post = await Posts.findByPk(PostId,{
 			attributes:['commentCount']
 		});
-
+		if(!post) throw new Error("Post not Found");
 		// Store the comment of a post
 		const comment = await Comments.create({
 			UserId,
@@ -31,16 +34,20 @@ module.exports.create = async(req,res)=>{
 		
 		return res.status(201).json(comment);
 	}catch(err){
-		return res.redirect("/");
+		return res.status(400).json({
+			message : err.message
+		})
 	}
 }
 
 // Delete the comment using its id
 module.exports.delete = async (req,res)=>{
-	const id = req.params.commentId;
+	const request = {...req.body};
+	const id = request.commentId;
 	try{
 		// find the comment count to decrease the commentCount by 1
 		const comment = await Comments.findByPk(id);
+		if(!comment) throw new Error("Comment not found");
 		//find the comment count of the post
 		const post = await Posts.findByPk(comment.PostId,{
 			attributes:['commentCount']
@@ -63,12 +70,13 @@ module.exports.delete = async (req,res)=>{
 				}
 			});
 			
-			return res.status(200).json({"success":"Comment deleted"});
+			return res.status(200).json({"message":"Comment deleted successfully"});
 		}
 
-		return res.status(404).json({"error":"No such comment exists"});
+		return res.status(404).json({"message":"No such comment exists"});
 	}catch(err){
-
-		return res.redirect("/");
+		return res.status(400).json({
+			message : err.message
+		})
 	}
 }
